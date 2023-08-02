@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+{%block title %}Election Win{%endblock%}
+{%block body%}
+<div class="row">
+    <div class="container col-sm-8">
+        <br>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Wining Table
+              
+            </div>
+            <div class="panel-box">
+                <table class="table table-striped">
+                    <thead><th>Candidates</th><th>Vote</th></thead>
+                    {%for key,val in data.items%}
+                        <tr><td>{{key}}</td><td>{{val}}</td></tr>
+                    {%endfor%}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}

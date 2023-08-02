@@ -1,0 +1,77 @@
+{%extends 'base.html'%}
+{%block title%}Vote Machine{%endblock%}
+
+{%block body%}
+<!-- <a href="#myModal" class="trigger-btn" data-toggle="modal">Click to Open Confirm Modal</a> -->
+<div class="row">
+    <div class="container col-sm-11">
+        <div class="alert alert-info">
+            <center>{{request.session.name}}</center>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Vote Table
+                <div class="pull-right">
+                    <a href="#myModal" data-toggle="modal"><button class="btn btn-primary vote_pack trigger-btn " data-toggle="modal">Publish</button></a>
+                </div>
+            </div>
+            <div class="panel-box">
+                <table class="table table-striped">
+                    <thead class="table-header">
+                        <th>Image</th>
+                        <th>Party Sign</th>
+                        <th>Party Name</th>
+                        <th>CHOOSE VOTE</th>
+                    </thead>
+                    <tbody>
+                        {%for nm in party%}
+                            <tr>
+                                <td><img src="/vote_image/{{nm.party_image}}" height="80" width="80"></td>
+                                <td>{{nm.party_name}}</td>
+                                <td>{{nm.party_sign}}</td>
+                                <td>
+                                    <div class="col-sm-4">
+                                    <input type="radio" name="vated"  value="{{nm.id}}" class="custom_radio" style="height:30px;width: 30px;">
+                                    </div>
+                                </td>
+                            </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{%csrf_token%}
+{%endblock%}
+{%block footer%}
+<script>
+    $('.vote_pack').click(function(e){
+        $(".perm").click(function(e0){
+            let cs = $('input[name=csrfmiddlewaretoken]').val();
+            var check = ($('input[name=vated]'));
+            for(let i = 0; i<check.length;i++)
+            {
+                if(check[i].checked == true)
+                {
+                    let vote_id= check[i].value;
+                    $.ajax({
+                    url:'{%url "set_vote"%}',
+                    data:'id='+vote_id+'&csrfmiddlewaretoken='+cs,
+                    type:'post',
+                    success:function(result){
+                        if(result.working == 1)
+                            location.href="";
+                    
+                    },
+                    error:function(a,b,c){
+                        console.log(a.responseText)
+                    }
+                });
+                }
+            }   
+            });
+        
+    })
+</script>
+{%endblock%}

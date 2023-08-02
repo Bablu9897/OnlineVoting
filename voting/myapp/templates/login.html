@@ -1,0 +1,92 @@
+{%extends 'base.html' %}
+{%block title%}Log In{%endblock%}
+{%block body%}
+	<!--/banner-->
+	<div class="banner-inner">
+	</div>
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">
+			<a href="/admin"><u>Admin</u></a>
+			</li>
+		
+	</ol>
+	<!--//banner-->
+	<!--/main-->
+	<div class="row">
+		<div class="container"><br>	
+			<div id="infoshow"></div>
+			{%if messages%}
+                <center>
+                        {%for  msg in messages%}
+                                <div class="alert alert-{{msg.tags}}"><h3>{{msg}}</h3></div>	
+                        {%endfor%}
+                </center>
+            {%endif%}
+			<div class="panel panel-info">
+			<div class="panel-heading">
+				<h3 class="tittle">Log In</h3>
+			</div>
+			<div class="panel-box">
+					<div class="inner-sec">
+				<div class="login p-5 bg-light mx-auto mw-100">
+					<form class="voter_login">
+						{%csrf_token%}
+							<div class="form-row">
+									<div class="col-md-6 mb-3">
+											<label for="validationCustom01">Voter Card Number</label>
+
+										<input type="number" class="form-control" name="v_no"  required="">
+									</div>
+									
+								</div>
+								<div class="form-row">
+									<div class="form-group col-md-6">
+											<label for="exampleInputPassword1 mb-2">Mobile</label>
+										<input type="number" class="form-control" name="phone" required="">
+									</div>
+									
+									
+								</div>
+								<div class="panel-footer">
+								<button type="submit" class="btn btn-primary submit mb-4 ">Register</button>
+								</div><br>
+								<p>
+										<a href="#">More Information</a>
+									</p>
+							</form>
+						
+						</div>
+			</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{%endblock%}
+{%block footer%}
+<script>
+	$('.voter_login').submit((e)=>{
+	e.preventDefault();
+    let datastring = $('.voter_login').serialize();
+    $.ajax({
+        url:'ajax/',
+        data:datastring,
+        type:'post',
+        success:function(result){
+            console.log(result);
+            if(result.data == 1)
+            {
+                location.href="vote_machine/"
+            }
+            else
+                document.getElementById("infoshow").innerHTML=`
+               <div class='alert alert-danger'>Voter And Mobile Number Is Wrong</div>`;
+
+        },
+        error:function(a,b,c){
+            console.log(a.responseText)
+        }
+    });
+	
+});
+</script>
+{%endblock%}
